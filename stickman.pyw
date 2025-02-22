@@ -1,7 +1,15 @@
 import tkinter as tk
+import random
+# stickman v1.0
+# A simple stickman animation that moves across the screen
+# and can be dragged around the screen.
+# TODO: does not work accross multiple monitors
 
 class StickmanApp:
-    def __init__(self):
+    def __init__(self, color="alanOrange", thickness=5, hollow=True):
+        self.color = color
+        self.thickness = thickness
+        self.hollow = hollow
         self.root = tk.Tk()
         self.root.overrideredirect(True)  # Remove window borders
         self.root.attributes("-toolwindow", True)  # Make it look like a small tool window
@@ -31,10 +39,27 @@ class StickmanApp:
         self.root.bind("<B1-Motion>", self.on_drag_motion)
 
     def draw_stickman(self, frame):
-        color = "#FF6F00"
+        color = self.color
+        if self.color=="random":
+            color = "#"+"".join([random.choice("0123456789ABCDEF") for _ in range(6)])
+        elif self.color=="alanOrange":
+            color = "#FF6F00"
+        elif self.color=="alanBlue":
+            color = "#25C0FF"
+        elif self.color=="alanGreen":
+            color = "#5FB700"
+        elif self.color=="alanRed":
+            color = "#DB1300"
+        elif self.color=="alanPurple":
+            color = "#A3189D"
+        elif self.color=="alanYellow":
+            color = "#FFC500"
         width = 5
         self.canvas.delete("all")
-        self.canvas.create_oval(15, 10, 35, 30, outline=color, width=width)  # Head
+        if not self.hollow:
+            self.canvas.create_oval(15, 10, 35, 30, outline=color, fill=color, width=width)  # Head
+        else:
+            self.canvas.create_oval(15, 10, 35, 30, outline=color, width=width)  # Head
         self.canvas.create_line(25, 30, 25, 70, fill=color, width=width)  # Body
         if frame == 1:
             self.canvas.create_line(25, 30, 10, 50, fill=color, width=width)  # Left arm
@@ -108,5 +133,22 @@ class StickmanApp:
         self.root.geometry(f"+{new_x}+{new_y}")
 
 if __name__ == "__main__":
-    app = StickmanApp()
-    app.root.mainloop()
+    import sys
+    try:
+        if sys.argv[0].startswith("stickman."):
+            if sys.argv[1]=="--version":
+                print("stickman v1.0")
+                sys.exit(0)
+            try:
+                color = sys.argv[1]
+                hollow = sys.argv[2].lower() in ["true", "1", "yes"]
+                app = StickmanApp(color, 5, hollow)
+                app.root.mainloop()
+            except:
+                app = StickmanApp()
+                app.root.mainloop()
+    except:
+        app = StickmanApp()
+        app.root.mainloop()
+    
+            
