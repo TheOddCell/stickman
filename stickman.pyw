@@ -62,11 +62,30 @@ class StickmanApp:
 
     def move_stickman(self):
         screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
         self.position_x += 5 * self.direction
-        self.direction = 3
+        self.direction = 1
+
+        # Check if the stickman has moved off the right edge of the screen
+        if self.position_x >= screen_width:
+            self.position_x = 0
+            self.position_y += 100  # Move to the next row of monitors (simulate)
+
+        # Check if the stickman has moved off the bottom edge of the screen
+        if self.position_y >= screen_height - 135:
+            self.position_y = screen_height - 135  # Stay within the screen limits
+
+        # Ensure the stickman stays within the screen boundaries when dragged
+        if self.position_x < 0:
+            self.position_x = 0
+        if self.position_y < 0:
+            self.position_y = 0
 
         self.root.geometry(f"50x100+{self.position_x}+{self.position_y}")
         self.root.after(1000, self.move_stickman)
+        if self.position_y >= screen_height - 135:
+            self.position_y = screen_height - 135
 
     def close_app(self, event):
         """Handle double-click to close the app"""
