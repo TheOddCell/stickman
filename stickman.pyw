@@ -14,6 +14,7 @@ class StickmanApp:
         self.stickman_frames = [1, 2, 3]
         self.current_frame = 0
         self.position_x = 0
+        self.position_y = self.root.winfo_screenheight() - 135  # Initial Y position, respect dragging
         self.direction = 1
 
         self.animate()
@@ -21,6 +22,13 @@ class StickmanApp:
 
         # Bind double-click event to close the app
         self.root.bind("<Double-1>", self.close_app)  # Double-click to close
+
+        # Variables for draggable functionality
+        self.drag_data = {"x": 0, "y": 0}
+
+        # Bind mouse events to make the window draggable
+        self.root.bind("<ButtonPress-1>", self.on_drag_start)
+        self.root.bind("<B1-Motion>", self.on_drag_motion)
 
     def draw_stickman(self, frame):
         color = "#FF6F00"
@@ -57,13 +65,28 @@ class StickmanApp:
         self.position_x += 5 * self.direction
         self.direction = 3
 
-        self.root.geometry(f"50x100+{self.position_x}+{self.root.winfo_screenheight() - 135}")
+        self.root.geometry(f"50x100+{self.position_x}+{self.position_y}")
         self.root.after(1000, self.move_stickman)
 
     def close_app(self, event):
         """Handle double-click to close the app"""
         self.root.quit()
         self.root.destroy()
+
+    def on_drag_start(self, event):
+        """Record the position of the mouse when dragging starts"""
+        self.drag_data["x"] = event.x
+        self.drag_data["y"] = event.y
+
+    def on_drag_motion(self, event):
+        """Move the window when dragging"""
+        delta_x = event.x - self.drag_data["x"]
+        delta_y = event.y - self.drag_data["y"]
+        new_x = self.root.winfo_x() + delta_x
+        new_y = self.root.winfo_y() + delta_y
+        self.position_x = new_x  # Update stickman's position
+        self.position_y = new_y  # Update stickman's position
+        self.root.geometry(f"+{new_x}+{new_y}")
 
 if __name__ == "__main__":
     app = StickmanApp()
