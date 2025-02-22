@@ -44,7 +44,6 @@ class StickmanApp:
         else:
             self.canvas.create_line(25, 70, 10, 85, fill=color, width=width)  # Left leg
             self.canvas.create_line(25, 70, 30, 90, fill=color, width=width)  # Right leg
-
         if self.position_x >= self.root.winfo_screenwidth():
             self.position_x = 0
 
