@@ -6,10 +6,12 @@ import random
 # TODO: does not work accross multiple monitors
 
 class StickmanApp:
-    def __init__(self, color="alanOrange", thickness=5, hollow=True):
+    def __init__(self, color="alanOrange", thickness=5, hollow=True, speedms=1000, delta=1000):
         self.color = color
         self.thickness = thickness
         self.hollow = hollow
+        self.speedms = speedms
+        self.delta = delta
         self.root = tk.Tk()
         self.root.overrideredirect(True)  # Remove window borders
         self.root.attributes("-toolwindow", True)  # Make it look like a small tool window
@@ -83,7 +85,7 @@ class StickmanApp:
     def animate(self):
         self.current_frame = (self.current_frame + 1) % 3
         self.draw_stickman(self.current_frame + 1)
-        self.root.after(1000, self.animate)
+        self.root.after(self.speedms+random.randrange(self.delta), self.animate)
 
     def move_stickman(self):
         screen_width = self.root.winfo_screenwidth()
@@ -108,7 +110,7 @@ class StickmanApp:
             self.position_y = 0
 
         self.root.geometry(f"50x100+{self.position_x}+{self.position_y}")
-        self.root.after(1000, self.move_stickman)
+        self.root.after(self.speedms+random.randrange(self.delta), self.move_stickman)
         if self.position_y >= screen_height - 135:
             self.position_y = screen_height - 135
 
@@ -137,7 +139,7 @@ if __name__ == "__main__":
     try:
         if sys.argv[0].startswith("stickman."):
             if sys.argv[1]=="--version":
-                print("stickman v1.0")
+                print("stickman v1.3")
                 sys.exit(0)
             try:
                 color = sys.argv[1]
