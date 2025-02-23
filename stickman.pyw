@@ -86,7 +86,7 @@ class StickmanApp:
     def animate(self):
         self.current_frame = (self.current_frame + 1) % 3
         self.draw_stickman(self.current_frame + 1)
-        self.root.after(self.speedms+random.randrange(self.delta), self.animate)
+        self.root.after(self.speedms+random.randrange(self.delta*-1, self.delta), self.animate)
 
     def move_stickman(self):
         screen_width = self.root.winfo_screenwidth()
@@ -111,7 +111,7 @@ class StickmanApp:
             self.position_y = 0
 
         self.root.geometry(f"50x100+{self.position_x}+{self.position_y}")
-        self.root.after(self.speedms+random.randrange(self.delta), self.move_stickman)
+        self.root.after(self.speedms+random.randrange(self.delta*-1, self.delta), self.move_stickman)
         if self.position_y >= screen_height - 135:
             self.position_y = screen_height - 135
 
