@@ -1,9 +1,10 @@
 import tkinter as tk
 import random
-# stickman v1.0
+# stickman v1.3
 # A simple stickman animation that moves across the screen
 # and can be dragged around the screen.
-# TODO: does not work accross multiple monitors
+# TODO: does not work accross multiple monitors but I can't test it on my machine
+
 
 class StickmanApp:
     def __init__(self, color="alanOrange", thickness=5, hollow=True, speedms=1000, delta=1000):
@@ -143,11 +144,16 @@ if __name__ == "__main__":
                 sys.exit(0)
             try:
                 color = sys.argv[1]
-                hollow = sys.argv[2].lower() in ["true", "1", "yes"]
-                app = StickmanApp(color, 5, hollow)
+                thickness = int(sys.argv[2])
+                hollow = sys.argv[3].lower() in ["true", "1", "yes"]
+                speedms = int(sys.argv[4])
+                delta = int(sys.argv[5])
+                app = StickmanApp(color, thickness, hollow, speedms, delta)
                 app.root.mainloop()
             except:
-                app = StickmanApp()
+                color = sys.argv[1]
+                hollow = sys.argv[2].lower() in ["true", "1", "yes"]
+                app = StickmanApp(color, 5, hollow)
                 app.root.mainloop()
     except:
         app = StickmanApp()
